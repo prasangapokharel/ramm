@@ -6,11 +6,12 @@ at preset price intervals to capitalize on price oscillations in range-bound mar
 Includes automated risk controls and position management.
 """
 
+import json
+import random
 import time
 from datetime import datetime
-from typing import List, Dict, Optional, Tuple
 from enum import Enum
-import json
+from typing import List, Dict, Optional, Tuple
 
 
 class OrderType(Enum):
@@ -238,7 +239,8 @@ class GridTradingStrategy:
         
         # Check if price is outside grid bounds
         if current_price < self.lower_bound or current_price > self.upper_bound:
-            print(f"Warning: Price {current_price} is outside grid bounds [{self.lower_bound}, {self.upper_bound}]")
+            print(f"Warning: Price {current_price} is outside grid bounds [{self.lower_bound}, {self.upper_bound}]. "
+                  f"Consider stopping strategy or adjusting grid range to avoid excessive risk.")
         
         # Process pending orders
         self._process_orders(current_price)
@@ -284,7 +286,8 @@ class GridTradingStrategy:
         new_exposure = quantity * entry_price
         
         if total_exposure + new_exposure > self.risk_control.max_total_exposure:
-            print(f"Warning: Cannot open position. Would exceed max total exposure.")
+            print(f"Warning: Cannot open position. Current exposure: ${total_exposure:.2f}, "
+                  f"new position: ${new_exposure:.2f}, limit: ${self.risk_control.max_total_exposure:.2f}")
             return
         
         position = Position(quantity, entry_price)
@@ -319,23 +322,43 @@ class GridTradingStrategy:
         """Place a sell order at the next grid level above current price"""
         for price in self.grid_prices:
             if price > current_price:
-                try:
-                    self._create_order(OrderType.SELL, price, self.quantity_per_grid)
-                    break
-                except RuntimeError:
-                    # Max open orders reached
-                    break
+                # Check if there's already a pending sell order at this price
+                existing_order = any(
+                    order.order_type == OrderType.SELL and 
+                    order.price == price and 
+                    order.status == OrderStatus.PENDING
+                    for order in self.orders
+                )
+                if not existing_order:
+                    try:
+                        self._create_order(OrderType.SELL, price, self.quantity_per_grid)
+                        break
+                    except RuntimeError:
+                        # Max open orders reached
+                        break
+                else:
+                    break  # Already have an order at this level
     
     def _place_next_buy_order(self, current_price: float):
         """Place a buy order at the next grid level below current price"""
         for price in reversed(self.grid_prices):
             if price < current_price:
-                try:
-                    self._create_order(OrderType.BUY, price, self.quantity_per_grid)
-                    break
-                except RuntimeError:
-                    # Max open orders reached
-                    break
+                # Check if there's already a pending buy order at this price
+                existing_order = any(
+                    order.order_type == OrderType.BUY and 
+                    order.price == price and 
+                    order.status == OrderStatus.PENDING
+                    for order in self.orders
+                )
+                if not existing_order:
+                    try:
+                        self._create_order(OrderType.BUY, price, self.quantity_per_grid)
+                        break
+                    except RuntimeError:
+                        # Max open orders reached
+                        break
+                else:
+                    break  # Already have an order at this level
     
     def _check_risk_controls(self, current_price: float):
         """Check risk controls on existing positions"""
@@ -532,7 +555,6 @@ if __name__ == "__main__":
     simulator = GridTradingSimulator(strategy)
     
     # Generate sample price data (oscillating within range)
-    import random
     random.seed(42)
     
     base_price = 32500.0
