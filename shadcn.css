@@ -1,0 +1,154 @@
+:root {
+  /* CSS Variables */
+  --color-background: #ffffff;
+  --color-background-dark: #1a1a1a;
+  --color-text: #000000;
+  --color-text-dark: #ffffff;
+  /* Add other variables as needed */
+}
+
+/* Dialog Component */
+.dialog {
+  background: var(--color-background);
+  color: var(--color-text);
+  /* Add more styles */
+}
+
+@media (prefers-color-scheme: dark) {
+  .dialog {
+    background: var(--color-background-dark);
+    color: var(--color-text-dark);
+  }
+}
+
+/* Drawer Component */
+.drawer {
+  /* Styles */
+}
+
+/* Dropdown Component */
+.dropdown {
+  /* Styles */
+}
+
+/* Form Component */
+.form {
+  /* Styles */
+}
+
+/* Hover Card Component */
+.hover-card {
+  /* Styles */
+}
+
+/* Input Component */
+.input {
+  /* Styles */
+}
+
+/* Label Component */
+.label {
+  /* Styles */
+}
+
+/* Menubar Component */
+.menubar {
+  /* Styles */
+}
+
+/* Modal Component */
+.modal {
+  /* Styles */
+}
+
+/* Navigation Menu Component */
+.navigation-menu {
+  /* Styles */
+}
+
+/* Pagination Component */
+.pagination {
+  /* Styles */
+}
+
+/* Popover Component */
+.popover {
+  /* Styles */
+}
+
+/* Progress Component */
+.progress {
+  /* Styles */
+}
+
+/* Radio Group Component */
+.radio-group {
+  /* Styles */
+}
+
+/* Scroll Area Component */
+.scroll-area {
+  /* Styles */
+}
+
+/* Select Component */
+.select {
+  /* Styles */
+}
+
+/* Sheet Component */
+.sheet {
+  /* Styles */
+}
+
+/* Skeleton Component */
+.skeleton {
+  /* Styles */
+}
+
+/* Slider Component */
+.slider {
+  /* Styles */
+}
+
+/* Switch Component */
+.switch {
+  /* Styles */
+}
+
+/* Table Component */
+.table {
+  /* Styles */
+}
+
+/* Tabs Component */
+.tabs {
+  /* Styles */
+}
+
+/* Textarea Component */
+.textarea {
+  /* Styles */
+}
+
+/* Toast Component */
+.toast {
+  /* Styles */
+}
+
+/* Toggle Component */
+.toggle {
+  /* Styles */
+}
+
+/* Toggle Group Component */
+.toggle-group {
+  /* Styles */
+}
+
+/* Tooltip Component */
+.tooltip {
+  /* Styles */
+}
+
+/* Additional components can be added below */
